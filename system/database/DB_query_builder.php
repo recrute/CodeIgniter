@@ -2002,9 +2002,9 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 		// Batch this baby
 		$affected_rows = 0;
-		for ($i = 0, $total = count($this->qb_set_ub); $i < $total; $i += $batch_size)
+		foreach (array_chunk($this->qb_set_ub, $batch_size) as $qb_set_ub_sub)
 		{
-			if ($this->query($this->_update_batch($this->protect_identifiers($table, TRUE, NULL, FALSE), array_slice($this->qb_set_ub, $i, $batch_size), $index)))
+			if ($this->query($this->_update_batch($this->protect_identifiers($table, TRUE, NULL, FALSE), $qb_set_ub_sub, $index)))
 			{
 				$affected_rows += $this->affected_rows();
 			}
